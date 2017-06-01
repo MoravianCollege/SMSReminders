@@ -11,10 +11,8 @@ for line in f_in:
     secrets.append(secret)
 f_in.close()
 
-account_sid = str(secrets[0])
-print(account_sid)
-auth_token = str(secrets[1])
-print(auth_token)
+account_sid = secrets[0]
+auth_token = secrets[1]
 sending_number = secrets[2]
 client = Client(account_sid, auth_token)
 
