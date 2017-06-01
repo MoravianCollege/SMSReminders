@@ -21,14 +21,15 @@ def run_process():
         send_notifications()
         time.sleep(10)
 
-# currently you will have to input the phone number
-# you wish to send to within this method
 def send_notifications():
-    for message, send_time in r.zscan_iter('reminders'):
+    for msg_and_num, send_time in r.zscan_iter('reminders'):
         if send_time > int(time.time()):
             return
         else:
-            client.messages.create(to='', from_=sending_number, body=message)
-            r.zrem('reminders', message)
+            temp = msg_and_num.decode('UTF-8').split(",")
+            message = temp[0]
+            receive_number = '+1' + temp[1]
+            client.messages.create(to=receive_number, from_=sending_number, body=message)
+            r.zrem('reminders', msg_and_num)
 
 run_process()
