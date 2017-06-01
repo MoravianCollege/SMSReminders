@@ -1,0 +1,16 @@
+version: "3"
+services:
+  flask:
+    build: FlaskDocker/
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./FlaskDocker:/code
+  redis:
+    image: armhf/redis
+    volumes:
+      - ./data:/data
+  twilio:
+    build: Notifier/
+    volumes:
+      - ./Notifier:/code
