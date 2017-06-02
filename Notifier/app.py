@@ -16,10 +16,12 @@ auth_token = secrets[1]
 sending_number = secrets[2]
 client = Client(account_sid, auth_token)
 
+
 def run_process():
     while True:
         send_notifications()
         time.sleep(10)
+
 
 def send_notifications():
     for msg_and_num, send_time in r.zscan_iter('reminders'):
