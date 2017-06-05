@@ -1,0 +1,6 @@
+site_name: Project Documentation
+pages:
+  - Tutorial: tutorial.md
+  - How-to Guide: how-to.md
+  - References: references.md
+  - Discussions: discussions.md
