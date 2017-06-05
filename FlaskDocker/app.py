@@ -7,19 +7,23 @@ r = Redis(host='redis', port='6379')
 
 
 @app.route('/', methods=['GET', 'POST'])
-def save_notification():
+def save_reminder():
     if request.method == 'POST':
-        receive_notification()
+        return add_new_reminder()
     else:
-        ret_str = ''
-        for msg_and_num, time_to_send in r.zscan_iter('reminders'):
-            temp_str = msg_and_num.decode('UTF-8').split(",")
-            ret_str += temp_str[0]
-            ret_str += ' ' + str(int(time_to_send) - int(time.time())) + '\n'
-        return ret_str
+        return show_remaining_reminders()
 
 
-def receive_notification():
+def show_remaining_reminders():
+    ret_str = ''
+    for msg_and_num, time_to_send in r.zscan_iter('reminders'):
+        temp_str = msg_and_num.decode('UTF-8').split(",")
+        ret_str += temp_str[0]
+        ret_str += ' ' + str(int(time_to_send) - int(time.time())) + '\n'
+    return ret_str
+
+
+def add_new_reminder():
     time_to_send = request.form['time']
     message = request.form['message']
     phone_number = request.form['phone_number']
@@ -27,6 +31,7 @@ def receive_notification():
     curr_time = int(time.time())
     exp_time = int(time_to_send) + curr_time
     r.zadd('reminders', msg_and_num, exp_time)
+    return 'New reminder added successfully'
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
